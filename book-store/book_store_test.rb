@@ -10,37 +10,37 @@ class BookStoreTest < Minitest::Test
   end
 
   def test_two_of_the_same_book
-    skip
+    # skip
     basket = [2, 2]
     assert_equal 16.00, BookStore.calculate_price(basket)
   end
 
   def test_empty_basket
-    skip
+    # skip
     basket = []
     assert_equal 0.00, BookStore.calculate_price(basket)
   end
 
   def test_two_different_books
-    skip
+    # skip
     basket = [1, 2]
     assert_equal 15.20, BookStore.calculate_price(basket)
   end
 
   def test_three_different_books
-    skip
+    # skip
     basket = [1, 2, 3]
     assert_equal 21.60, BookStore.calculate_price(basket)
   end
 
   def test_four_different_books
-    skip
+    # skip
     basket = [1, 2, 3, 4]
     assert_equal 25.60, BookStore.calculate_price(basket)
   end
 
   def test_five_different_books
-    skip
+    # skip
     basket = [1, 2, 3, 4, 5]
     assert_equal 30.00, BookStore.calculate_price(basket)
   end
