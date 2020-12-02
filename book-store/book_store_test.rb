@@ -1,5 +1,7 @@
 require 'minitest/autorun'
 require_relative 'book_store'
+require_relative 'combinations'
+require_relative 'test/combinations'
 
 # Common test data version: 1.4.0 33c6b60
 class BookStoreTest < Minitest::Test
@@ -46,7 +48,7 @@ class BookStoreTest < Minitest::Test
   end
 
   def test_two_groups_of_four_is_cheaper_than_group_of_five_plus_group_of_three
-    skip
+    # skip
     basket = [1, 1, 2, 2, 3, 3, 4, 5]
     assert_equal 51.20, BookStore.calculate_price(basket)
   end
