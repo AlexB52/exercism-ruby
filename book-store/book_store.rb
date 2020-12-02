@@ -6,6 +6,9 @@ To get started with TDD, see the `README.md` file in your
 `ruby/book-store` directory.
 =end
 
+require 'byebug'
+require_relative 'combinations'
+
 def price_of_basket(basket)
   case basket.count
   when 0
@@ -23,11 +26,14 @@ def price_of_basket(basket)
   end
 end
 
+Book = Struct.new(:id)
+
 class BookStore
   def self.calculate_price(basket)
     return price_of_basket(basket) if basket.uniq == basket
 
-    8.0 * basket.count
+    Combination.for(basket).map do |possiblities|
+      possiblities.reduce(0) { |result, bundle| result += price_of_basket(bundle) }
+    end.min
   end
 end
-
