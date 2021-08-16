@@ -38,56 +38,18 @@ class CombinationsTest < MiniTest::Test
     assert_equal expected, Combination.new([1, 1, 1, 2, 2, 3]).bundles
   end
 
-  def test_permutations
-    expected = [
-      [
-        [1, 1, 1],
-        [1, 1, 1],
-        [1, 1, 1],
-      ],
-      [
-        [2, 2, nil],
-        [2, nil, 2],
-        [nil, 2, 2],
-      ]
-    ]
+  def test_starting_bundles
+    expected = [[1,4], [1, 4], [1, 4]]
 
-    assert_equal expected, Combination.new([1, 1, 1, 2, 2]).permutations
-  end
-
-  def test_possibilities
-    expected = [
-      [
-        [1, 1, 1],
-        [2, 2, nil],
-        [3, nil, nil],
-      ],
-      [
-        [1, 1, 1],
-        [2, nil, 2],
-        [nil, 3, nil],
-      ],
-      [
-        [1, 1, 1],
-        [nil, 2, 2],
-        [nil, nil, 3],
-      ]
-    ]
-
-    assert_equal expected, Combination.new([1, 1, 1, 2, 2, 3]).possibilities
+    assert_equal expected, Combination.new([1, 1, 1, 2, 2, 3, 4, 4, 4]).starting_bundles
   end
 
   def test_combinations
     expected = [
       [
-        [1, 2, 3],
         [1, 2],
-        [1],
-      ],
-      [
         [1, 2],
         [1, 3],
-        [1, 2],
       ],
       [
         [1],
@@ -103,15 +65,15 @@ class CombinationsTest < MiniTest::Test
   def test_combinations_complex
     expected = [
       [
-        [1, 2, 3, 4, 5],
-        [1, 2, 3],
-      ],
-      [
         [1, 2, 3, 4],
         [1, 2, 3, 5],
-      ]
+      ],
+      [
+        [1, 2, 3],
+        [1, 2, 3, 4, 5],
+      ],
     ]
 
-    assert_equal expected, Combination.for([1, 1, 2, 2, 3, 3, 4, 5])
+    assert_equal expected, Combination.test_for([1, 1, 2, 2, 3, 3, 4, 5])
   end
 end

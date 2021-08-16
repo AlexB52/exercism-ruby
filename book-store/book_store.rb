@@ -7,7 +7,7 @@ To get started with TDD, see the `README.md` file in your
 =end
 
 require 'byebug'
-require_relative 'combinations'
+require_relative 'combination'
 
 def price_of_basket(basket)
   case basket.count
