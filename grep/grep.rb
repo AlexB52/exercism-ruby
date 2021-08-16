@@ -25,7 +25,7 @@ module Grep
     if flags.include?('-l')
       Options::PrintNameOption.new.print(matches).first
     elsif flags.include?('-n')
-      Options::PrintLineOption.new.print(matches).first
+      Options::PrintLineOption.new.print(matches).join("\n")
     else
       matches.map(&:line).join("\n")
     end
