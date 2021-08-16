@@ -36,6 +36,8 @@ module Grep
         case flag
         when '-i'
           CaseInsensitiveOption.new
+        when '-x'
+          FullMatchOption.new
         when '-l'
           PrintNameOption.new
         else
@@ -52,13 +54,20 @@ module Grep
 
     class CaseInsensitiveOption < Option
       def parse_regex(regex)
-        Regexp.new(regex.source, Regexp::IGNORECASE)
+        options = regex.options + Regexp::IGNORECASE
+        Regexp.new(regex.source, options)
       end
     end
 
     class PrintNameOption < Option
       def print(files)
         files.map(&:path)
+      end
+    end
+
+    class FullMatchOption < Option
+      def parse_regex(regex)
+        Regexp.new(/^#{regex.to_s}$/)
       end
     end
   end

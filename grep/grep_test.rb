@@ -93,7 +93,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_match_entire_lines_flag
-    skip
+    # skip
     pattern = "With loss of Eden, till one greater Man"
     flags = ["-x"]
     files = ["paradise-lost.txt"]
