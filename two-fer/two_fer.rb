@@ -1,5 +1,7 @@
 module TwoFer
-  def self.two_fer(name = "you")
+  module_function
+
+  def two_fer(name = "you")
     "One for #{name}, one for me."
   end
 end

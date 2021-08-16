@@ -1,5 +1,7 @@
 module HelloWorld
-  def self.hello
+  module_function
+
+  def hello
     "Hello, World!"
   end
 end
