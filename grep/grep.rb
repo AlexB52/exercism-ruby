@@ -18,16 +18,16 @@ module Grep
 
     files = files.map { |file| File.new(file) }
 
-    results = files.flat_map do |file|
+    matches = files.flat_map do |file|
       file.grep(regex)
     end
 
     if flags.include?('-l')
-      Options::PrintNameOption.new.print(results).first
+      Options::PrintNameOption.new.print(matches).first
     elsif flags.include?('-n')
-      Options::PrintLineOption.new.print(results).first
+      Options::PrintLineOption.new.print(matches).first
     else
-      results.first.grep(regex).first
+      matches.map(&:line).join("\n")
     end
 
   end

@@ -117,7 +117,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_no_flags
-    skip
+    # skip
     pattern = "may"
     flags = []
     files = ["midsummer-night.txt"]
