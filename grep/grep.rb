@@ -10,10 +10,34 @@ module Grep
   module_function
 
   def grep(pattern, flags, files)
-    pattern = Regexp.new(pattern)
+    regex = Regexp.new(pattern)
+
+    Options.for(flags).each do |option|
+      regex = option.parse(regex)
+    end
+
     files.flat_map do |file|
-      File.new(file).grep(pattern)
+      File.new(file).grep(regex)
     end.first
+  end
+
+  class Options
+    def self.for(flags)
+      flags.map do |flag|
+        case flag
+        when '-i'
+          CaseInsensitiveOption.new
+        else
+          raise 'unknown flag'
+        end
+      end
+    end
+
+    class CaseInsensitiveOption
+      def parse(regex)
+        Regexp.new(regex.source, Regexp::IGNORECASE)
+      end
+    end
   end
 
   class File
