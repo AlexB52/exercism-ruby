@@ -105,7 +105,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_multiple_flags
-    skip
+    # skip
     pattern = "OF ATREUS, Agamemnon, KIng of MEN."
     flags = ["-n", "-i", "-x"]
     files = ["iliad.txt"]

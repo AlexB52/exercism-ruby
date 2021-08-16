@@ -18,12 +18,14 @@ module Grep
 
     files = files.map { |file| File.new(file) }
 
-    results = files.select do |file|
+    results = files.flat_map do |file|
       file.grep(regex)
     end
 
     if flags.include?('-l')
       Options::PrintNameOption.new.print(results).first
+    elsif flags.include?('-n')
+      Options::PrintLineOption.new.print(results).first
     else
       results.first.grep(regex).first
     end
@@ -40,6 +42,8 @@ module Grep
           FullMatchOption.new
         when '-l'
           PrintNameOption.new
+        when '-n'
+          PrintLineOption.new
         else
           raise 'unknown flag'
         end
@@ -49,6 +53,10 @@ module Grep
     class Option
       def parse_regex(regex)
         regex
+      end
+
+      def print(matches)
+        matches.map(&:line)
       end
     end
 
@@ -60,8 +68,8 @@ module Grep
     end
 
     class PrintNameOption < Option
-      def print(files)
-        files.map(&:path)
+      def print(matches)
+        matches.map(&:filename)
       end
     end
 
@@ -70,17 +78,31 @@ module Grep
         Regexp.new(/^#{regex.to_s}$/)
       end
     end
+
+    class PrintLineOption < Option
+      def print(matches)
+        matches.map do |match|
+          "#{match.number}:#{match.line}"
+        end
+      end
+    end
   end
 
   class File
-    attr_reader :lines, :path
+    Match = Struct.new(:line, :number, :filename, keyword_init: true)
+
+    attr_reader :lines, :path, :matches
     def initialize(path)
       @path = path
       @lines = ::File.read(path).split("\n")
     end
 
     def grep(pattern)
-      lines.select { |line| pattern =~ line }
+      lines.filter_map.with_index do |line, index|
+        if pattern =~ line
+          Match.new(line: line, number: (index + 1), filename: path)
+        end
+      end
     end
   end
 end
