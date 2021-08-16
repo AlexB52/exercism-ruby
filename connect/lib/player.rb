@@ -1,18 +1,11 @@
-class Player
-  attr_reader :type, :pieces, :rule
-  def initialize(type, pieces:, rule:)
-    @type, @pieces, @rule = [type, pieces, rule]
-  end
-
-  def paths
-    @paths = Path.traverse rule.starting_pieces(pieces), pieces
-  end
+Player = Struct.new(:type, :pieces, :rule, keyword_init: true) do
+  alias to_s type
 
   def winner?
     rule.winning_paths?(paths)
   end
 
-  def to_s
-    type
+  def paths
+    @paths = Path.traverse rule.starting_pieces(pieces), pieces
   end
 end

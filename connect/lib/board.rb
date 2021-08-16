@@ -28,8 +28,10 @@ class Board
   end
 
   def player(type)
-    Player.new type,
+    Player.new(
+      type: type,
       pieces: nodes.for(type),
       rule: Rules.for(type, self)
+    )
   end
 end
