@@ -1,6 +1,6 @@
-require_relative 'board'
-require_relative 'player'
-require_relative 'rules'
-require_relative 'path'
-require_relative 'nodes'
+require_relative 'lib/board'
+require_relative 'lib/player'
+require_relative 'lib/rules'
+require_relative 'lib/path'
+require_relative 'lib/nodes'
 
