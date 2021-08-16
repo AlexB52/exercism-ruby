@@ -81,7 +81,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_print_file_names_flag
-    skip
+    # skip
     pattern = "Forbidden"
     flags = ["-l"]
     files = ["paradise-lost.txt"]

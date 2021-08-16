@@ -13,12 +13,21 @@ module Grep
     regex = Regexp.new(pattern)
 
     Options.for(flags).each do |option|
-      regex = option.parse(regex)
+      regex = option.parse_regex(regex)
     end
 
-    files.flat_map do |file|
-      File.new(file).grep(regex)
-    end.first
+    files = files.map { |file| File.new(file) }
+
+    results = files.select do |file|
+      file.grep(regex)
+    end
+
+    if flags.include?('-l')
+      Options::PrintNameOption.new.print(results).first
+    else
+      results.first.grep(regex).first
+    end
+
   end
 
   class Options
@@ -27,22 +36,37 @@ module Grep
         case flag
         when '-i'
           CaseInsensitiveOption.new
+        when '-l'
+          PrintNameOption.new
         else
           raise 'unknown flag'
         end
       end
     end
 
-    class CaseInsensitiveOption
-      def parse(regex)
+    class Option
+      def parse_regex(regex)
+        regex
+      end
+    end
+
+    class CaseInsensitiveOption < Option
+      def parse_regex(regex)
         Regexp.new(regex.source, Regexp::IGNORECASE)
+      end
+    end
+
+    class PrintNameOption < Option
+      def print(files)
+        files.map(&:path)
       end
     end
   end
 
   class File
-    attr_reader :lines
+    attr_reader :lines, :path
     def initialize(path)
+      @path = path
       @lines = ::File.read(path).split("\n")
     end
 
