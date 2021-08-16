@@ -1,12 +1,12 @@
 class Nodes < SimpleDelegator
   def self.build(rows)
-    new([].tap do |nodes|
-      rows.each_with_index do |row, row_index|
-        row.each_with_index do |type, column_index|
-          nodes << Node.new(type, Coordinate.new(row_index, column_index))
-        end
+    nodes = rows.flat_map.with_index do |row, row_index|
+      row.map.with_index do |type, column_index|
+        Node.new(type, Coordinate.new(row_index, column_index))
       end
-    end)
+    end
+
+    new(nodes)
   end
 
   def for(type)
