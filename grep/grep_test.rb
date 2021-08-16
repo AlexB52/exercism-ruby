@@ -170,7 +170,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_inverted_flag
-    skip
+    # skip
     pattern = "Of"
     flags = ["-v"]
     files = ["paradise-lost.txt"]

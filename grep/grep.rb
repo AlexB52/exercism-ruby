@@ -11,15 +11,20 @@ module Grep
 
   def grep(pattern, flags, files)
     regex = Regexp.new(pattern)
+    files = files.map { |file| File.new(file) }
 
     Options.for(flags).each do |option|
       regex = option.parse_regex(regex)
     end
 
-    files = files.map { |file| File.new(file) }
-
     matches = files.flat_map do |file|
       file.grep(regex)
+    end
+
+    if flags.include?('-v')
+      matches = files.flat_map do |file|
+        file.details - matches
+      end
     end
 
     if flags.include?('-l')
@@ -44,6 +49,8 @@ module Grep
           PrintNameOption.new
         when '-n'
           PrintLineOption.new
+        when '-v'
+          InvertedMatchesOption.new
         else
           raise 'unknown flag'
         end
@@ -86,10 +93,13 @@ module Grep
         end
       end
     end
+
+    class InvertedMatchesOption < Option
+    end
   end
 
   class File
-    Match = Struct.new(:line, :number, :filename, keyword_init: true)
+    Detail = Struct.new(:line, :number, :filename, keyword_init: true)
 
     attr_reader :lines, :path, :matches
     def initialize(path)
@@ -97,10 +107,16 @@ module Grep
       @lines = ::File.read(path).split("\n")
     end
 
+    def details
+      @lines.map.with_index do |line, index|
+        Detail.new(line: line, number: (index + 1), filename: path)
+      end
+    end
+
     def grep(pattern)
       lines.filter_map.with_index do |line, index|
         if pattern =~ line
-          Match.new(line: line, number: (index + 1), filename: path)
+          Detail.new(line: line, number: (index + 1), filename: path)
         end
       end
     end
