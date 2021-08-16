@@ -33,8 +33,7 @@ module Grep
       Options::PrintLineOption.new.print(matches).join("\n")
     else
       matches.map(&:line).join("\n")
-    end
-
+    end.to_s
   end
 
   class Options

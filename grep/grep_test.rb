@@ -186,7 +186,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_no_matches_various_flags
-    skip
+    # skip
     pattern = "Gandalf"
     flags = ["-n", "-l", "-x", "-i"]
     files = ["iliad.txt"]
