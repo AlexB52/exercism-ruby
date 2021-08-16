@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require_relative 'grep'
-
+require 'byebug'
 # Common test data version: 1.2.0 4f2efaa
 class GrepTest < Minitest::Test
   def setup
