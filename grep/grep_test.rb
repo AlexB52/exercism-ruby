@@ -210,7 +210,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_inverted_and_match_entire_lines_flags
-    skip
+    # skip
     pattern = "Illustrious into Ades premature,"
     flags = ["-x", "-v"]
     files = ["iliad.txt"]
