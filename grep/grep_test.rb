@@ -157,7 +157,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_case_insensitive_flag
-    skip
+    # skip
     pattern = "ACHILLES"
     flags = ["-i"]
     files = ["iliad.txt"]
