@@ -198,7 +198,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_file_flag_takes_precedence_over_line_flag
-    skip
+    # skip
     pattern = "ten"
     flags = ["-n", "-l"]
     files = ["iliad.txt"]
