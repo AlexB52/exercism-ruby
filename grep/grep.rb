@@ -9,31 +9,50 @@ To get started with TDD, see the `README.md` file in your
 module Grep
   module_function
 
+  Detail = Struct.new(:line, :number, :filename, keyword_init: true) do
+    def print
+      line
+    end
+
+    def print_with_filename
+      "#{filename}:#{line}"
+    end
+
+    def print_with_line_number
+      "#{number}:#{line}"
+    end
+  end
+
   def grep(pattern, flags, files)
     regex = Regexp.new(pattern)
     files = files.map { |file| File.new(file) }
+    file_count = files.length
 
     Options.for(flags).each do |option|
       regex = option.parse_regex(regex)
     end
+
+    details = files.flat_map(&:details)
 
     matches = files.flat_map do |file|
       file.grep(regex)
     end
 
     if flags.include?('-v')
-      matches = files.flat_map do |file|
-        file.details - matches
-      end
+      matches = details - matches
     end
 
     if flags.include?('-l')
-      Options::PrintNameOption.new.print(matches).first
+      matches.map(&:filename)
     elsif flags.include?('-n')
-      Options::PrintLineOption.new.print(matches).join("\n")
+      matches.map(&:print_with_line_number)
     else
-      matches.map(&:line).join("\n")
-    end.to_s
+      if files.length > 1
+        matches.map(&:print_with_filename)
+      else
+        matches.map(&:print)
+      end
+    end.join("\n")
   end
 
   class Options
@@ -44,14 +63,8 @@ module Grep
           CaseInsensitiveOption.new
         when '-x'
           FullMatchOption.new
-        when '-l'
-          PrintNameOption.new
-        when '-n'
-          PrintLineOption.new
-        when '-v'
-          InvertedMatchesOption.new
         else
-          raise 'unknown flag'
+          Option.new
         end
       end
     end
@@ -59,10 +72,6 @@ module Grep
     class Option
       def parse_regex(regex)
         regex
-      end
-
-      def print(matches)
-        matches.map(&:line)
       end
     end
 
@@ -73,33 +82,14 @@ module Grep
       end
     end
 
-    class PrintNameOption < Option
-      def print(matches)
-        matches.map(&:filename)
-      end
-    end
-
     class FullMatchOption < Option
       def parse_regex(regex)
         Regexp.new(/^#{regex.to_s}$/)
       end
     end
-
-    class PrintLineOption < Option
-      def print(matches)
-        matches.map do |match|
-          "#{match.number}:#{match.line}"
-        end
-      end
-    end
-
-    class InvertedMatchesOption < Option
-    end
   end
 
   class File
-    Detail = Struct.new(:line, :number, :filename, keyword_init: true)
-
     attr_reader :lines, :path, :matches
     def initialize(path)
       @path = path
