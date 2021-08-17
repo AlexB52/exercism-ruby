@@ -47,7 +47,7 @@ module Grep
     end
 
     if flags.include?('-l')
-      matches.map(&:filename)
+      matches.map(&:filename).uniq
     elsif flags.include?('-n')
       if files.length > 1
         matches.map(&:print_with_filename_and_line_number)

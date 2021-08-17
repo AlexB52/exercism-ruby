@@ -270,7 +270,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_multiple_files_one_match_print_file_names_flag
-    skip
+    # skip
     pattern = "who"
     flags = ["-l"]
     files = ["iliad.txt", "midsummer-night.txt", "paradise-lost.txt"]
