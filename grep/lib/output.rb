@@ -6,14 +6,14 @@ class Output < Struct.new(:matches, :options)
   def print
     return matches_filenames if options.filenames_only?
 
-    matches.map { |match_details| output(match_details) }
+    matches.map { |line_details| output(line_details) }
            .join("\n")
   end
 
-  def output(match_details)
-    OutputMatch.new(match_details).tap do |output|
-      output.activate_number   if options.line_number?
-      output.activate_filename if options.filename?
+  def output(line_details)
+    OutputMatch.new(line_details) do |output|
+      output.add_number   = options.line_number?
+      output.add_filename = options.filename?
     end.to_s
   end
 
@@ -22,18 +22,11 @@ class Output < Struct.new(:matches, :options)
   end
 
   class OutputMatch < SimpleDelegator
-    def initialize(line_detail)
-      super
-      @add_number = false
-      @add_filename = false
-    end
+    attr_accessor :add_number, :add_filename
 
-    def activate_number
-      @add_number = true
-    end
-
-    def activate_filename
-      @add_filename = true
+    def initialize(line_details, &block)
+      __setobj__ line_details
+      yield self if block_given?
     end
 
     def to_s
@@ -41,13 +34,14 @@ class Output < Struct.new(:matches, :options)
     end
 
     private
+
     def format_filename(string)
-      return string unless @add_filename
+      return string unless add_filename
       "#{filename}:#{string}"
     end
 
     def format_number(string)
-      return string unless @add_number
+      return string unless add_number
       "#{number}:#{string}"
     end
   end
