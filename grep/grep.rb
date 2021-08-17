@@ -21,6 +21,10 @@ module Grep
     def print_with_line_number
       "#{number}:#{line}"
     end
+
+    def print_with_filename_and_line_number
+      "#{filename}:#{number}:#{line}"
+    end
   end
 
   def grep(pattern, flags, files)
@@ -45,7 +49,11 @@ module Grep
     if flags.include?('-l')
       matches.map(&:filename)
     elsif flags.include?('-n')
-      matches.map(&:print_with_line_number)
+      if files.length > 1
+        matches.map(&:print_with_filename_and_line_number)
+      else
+        matches.map(&:print_with_line_number)
+      end
     else
       if files.length > 1
         matches.map(&:print_with_filename)
