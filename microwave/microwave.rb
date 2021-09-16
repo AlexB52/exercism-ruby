@@ -1,24 +1,29 @@
-require 'byebug'
-
 Microwave = Struct.new(:input) do
   def timer
-    min, sec = convert(seconds)
-    "#{format(min+minutes)}:#{format(sec)}"
-  end
-
-  def convert(seconds)
-    [seconds / 60, seconds % 60]
+    "#{format(minutes)}:#{format(seconds)}"
   end
 
   def seconds
-    format(input.to_s)[-2..].to_i
+    input_seconds % 60
   end
 
   def minutes
-    input.to_s[..-3].to_i
+    input_minutes + extra_minutes
   end
 
   private
+
+  def extra_minutes
+    input_seconds / 60
+  end
+
+  def input_seconds
+    format(input)[-2..].to_i
+  end
+
+  def input_minutes
+    format(input)[...-2].to_i
+  end
 
   def format(duration)
     duration.to_s.rjust(2,"0")
