@@ -3,7 +3,7 @@ require 'date'
 Meetup = Struct.new(:month, :year) do
   def day(day_name, descriptor)
     day_range(descriptor)
-      .select(&:"#{day_name}?")
+      .select(&day_method(day_name))
       .slice(day_index(descriptor))
   end
 
@@ -11,6 +11,10 @@ Meetup = Struct.new(:month, :year) do
 
   def day_range(descriptor)
     descriptor == :teenth ? teenth_days_of_month : days_of_month
+  end
+
+  def day_method(day_name)
+    "#{day_name}?".to_sym
   end
 
   def day_index(descriptor)
