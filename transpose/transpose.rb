@@ -33,7 +33,7 @@ class Transpose
 
   def format(row)
     result = row.join.rstrip
-    @line_length = result.length if result.length > line_length
+    @line_length = [result.length, line_length].max
     result.ljust(line_length)
   end
 end
