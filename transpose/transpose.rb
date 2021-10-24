@@ -1,40 +1,31 @@
-class Transpose
+Transpose = Struct.new(:input) do
+  EMPTY_CHAR = "\0"
+
   def self.transpose(input)
     new(input).transpose
   end
 
-  attr_reader :input, :line_length
-  def initialize(input)
-    @line_length = 1
-    @input = input
-  end
-
   def transpose
-    return "" if input.empty?
-
-    columns.reverse
-           .map { |column| format(column) }
-           .reverse
-           .join("\n")
+    lines.map(&justify_and_pad)
+         .transpose
+         .map(&:join)
+         .join("\n")
+         .gsub(/#{EMPTY_CHAR}+$/, "")
+         .gsub(/#{EMPTY_CHAR}/, " ")
   end
 
-  def rows
-    input.split("\n")
-         .map { |row| row.ljust(max_length).split("") }
+  def lines
+    @lines ||= input.split("\n")
   end
 
-  def columns
-    rows.transpose
+  private
+
+  def justify_and_pad
+    -> (row) { row.ljust(max_length, EMPTY_CHAR).split("") }
   end
 
   def max_length
-    @max_length ||= input.split("\n").map(&:length).max
-  end
-
-  def format(row)
-    result = row.join.rstrip
-    @line_length = [result.length, line_length].max
-    result.ljust(line_length)
+    @max_length ||= lines.map(&:length).max
   end
 end
 
