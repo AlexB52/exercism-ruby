@@ -12,19 +12,20 @@ class Integer
   }
 
   SHORTER_MAP = {
-    "DCCCC" => "CM",
-    "CCCC"  => "CD",
-    "LXXXX" => "XC",
-    "XXXX"  => "XL",
-    "VIIII" => "IX",
-    "IIII"  => "IV",
+    "DCCCC" => "CM", # 900
+    "CCCC"  => "CD", # 400
+    "LXXXX" => "XC", # 90
+    "XXXX"  => "XL", # 40
+    "VIIII" => "IX", # 9
+    "IIII"  => "IV", # 4
   }
 
   def to_roman
     result = ""
-    ROMAN_MAP.keys.reduce(self) do |number, roman_base|
+
+    ROMAN_MAP.reduce(self) do |number, (roman_base, roman_letter)|
       quotient, remainder = number.divmod(roman_base)
-      result += ROMAN_MAP[roman_base] * quotient if quotient.positive?
+      result += roman_letter * quotient
       remainder
     end
 
