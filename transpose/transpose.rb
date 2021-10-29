@@ -1,5 +1,5 @@
 Transpose = Struct.new(:input) do
-  EMPTY_CHAR = "\0"
+  EMPTY_CHAR = "\u0000"
 
   def self.transpose(input)
     new(input).transpose
@@ -28,4 +28,3 @@ Transpose = Struct.new(:input) do
     @max_length ||= lines.map(&:length).max
   end
 end
-
