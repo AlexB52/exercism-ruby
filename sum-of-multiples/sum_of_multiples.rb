@@ -1,7 +1,16 @@
-=begin
-Write your code for the 'Sum Of Multiples' exercise in this file. Make the tests in
-`sum_of_multiples_test.rb` pass.
+class SumOfMultiples
+  attr_reader :factors
+  def initialize(*factors)
+    @factors = factors.delete_if(&:zero?)
+  end
 
-To get started with TDD, see the `README.md` file in your
-`ruby/sum-of-multiples` directory.
-=end
+  def to(number_limit)
+    number_limit.times.sum { |number| multiple_exists?(number) ? number : 0 }
+  end
+
+  private
+
+  def multiple_exists?(number)
+    factors.any? { |factor| number.modulo(factor).zero? }
+  end
+end
