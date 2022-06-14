@@ -1,7 +1,10 @@
-=begin
-Write your code for the 'Anagram' exercise in this file. Make the tests in
-`anagram_test.rb` pass.
+Anagram = Struct.new(:reference) do
+  def match(words)
+    words.select do |word|
+      a = reference.downcase
+      b = word.downcase
 
-To get started with TDD, see the `README.md` file in your
-`ruby/anagram` directory.
-=end
+      a != b && a.each_char.sort == b.each_char.sort
+    end
+  end
+end
