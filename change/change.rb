@@ -7,9 +7,9 @@ class Change
       raise NegativeTargetError
     end
 
-    coins_per_change = (1..change).each.with_object({ 0 => [] }) do |i, result|
-      result[i] = coins
-        .map { |coin| [coin].concat(result[i-coin] || []) }
+    coins_per_change = (1..change).each.with_object({ 0 => [] }) do |i, obj|
+      obj[i] = coins
+        .map { |coin| [coin].concat(obj[i-coin] || []) }
         .select { _1.sum == i }
         .min_by(&:length)
     end
