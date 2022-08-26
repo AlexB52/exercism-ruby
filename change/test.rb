@@ -59,3 +59,8 @@ Benchmark.bm do |x|
   x.report("sol 3") { n.times { Change.coins_per_change3([1, 2, 5, 10, 20, 50, 100],1999)[1999] } }
 end
 
+require "irb"
+IRB.start(__FILE__)
+
+
+
