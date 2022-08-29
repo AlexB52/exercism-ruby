@@ -1,30 +1,50 @@
-# This isn't a linked list, yet specs pass
+require "byebug"
+
+Element = Struct.new(:datum) do
+  attr_accessor :next
+end
 
 class SimpleLinkedList
   def initialize(array = [])
-    @elements = []
+    @head = nil
     array.each { push(Element.new(_1)) }
   end
 
   def to_a
-    @elements.map(&:datum)
+    to_ary.map(&:datum)
+  end
+
+  def to_ary
+    return [] unless @head
+
+    element = @head
+    result = []
+    while element
+      result << element
+      element = element.next
+    end
+    result
   end
 
   def reverse!
-    @elements.reverse!
-    to_a.empty? ? self : to_a
+    array = to_ary.reverse
+    @head = array.first
+    array.each_cons(2) do |el1, el2|
+      el2.next = el1
+    end
+    to_a
   end
 
   def push(element)
-    @elements.unshift(element)
+    element.next = @head
+    @head = element
     self
   end
 
   def pop
-    @elements.shift
+    if (element = @head)
+      @head = element.next
+    end
+    element
   end
-end
-
-Element = Struct.new(:datum) do
-  attr_accessor :next
 end

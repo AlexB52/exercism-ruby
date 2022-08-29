@@ -115,7 +115,7 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_list_in_place_reverse_are_the_same_elements
-    # skip
+    skip
     first = Element.new(1)
     second = Element.new(2)
     list = SimpleLinkedList.new
@@ -128,13 +128,13 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_list_reverse_empty_list
-    # skip
+    skip
     list = SimpleLinkedList.new
     assert_equal list, list.reverse!
   end
 
   def test_works_for_1_through_10 # rubocop:disable Naming/VariableNumber
-    # skip
+    skip
     list = SimpleLinkedList.new(1..10)
     expected = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     assert_equal expected, list.to_a
