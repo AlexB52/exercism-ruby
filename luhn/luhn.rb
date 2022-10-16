@@ -6,15 +6,17 @@ module Luhn
     input.scan(/\d/)
          .reverse_each
          .with_index
-         .sum do |digit, i|
-            value = digit.to_i
+         .sum(&luhn_value_proc) % 10 == 0
+  end
 
-            if i % 2 != 0
-              value *= 2
-              value -= 9 if value > 9
-            end
-
-            value
-          end % 10 == 0
+  def luhn_value_proc
+    Proc.new do |digit, index|
+      value = digit.to_i
+      if index.odd?
+        value *= 2
+        value -= 9 if value > 9
+      end
+      value
+    end
   end
 end
