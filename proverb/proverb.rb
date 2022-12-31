@@ -1,7 +1,16 @@
-=begin
-Write your code for the 'Proverb' exercise in this file. Make the tests in
-`proverb_test.rb` pass.
+class Proverb
+  def initialize(*things, qualifier: nil)
+    @things = things
+    @goal = things.first
+    if qualifier
+      @goal = format("%s %s", qualifier, @goal)
+    end
+  end
 
-To get started with TDD, see the `README.md` file in your
-`ruby/proverb` directory.
-=end
+  def to_s
+    @things.each_cons(2)
+           .map { |want, lost| format("For want of a %s the %s was lost.", want, lost) }
+           .push(format("And all for the want of a %s.", @goal))
+           .join("\n")
+  end
+end
