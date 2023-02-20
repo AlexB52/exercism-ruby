@@ -3,34 +3,39 @@ class Alphametics
     new(puzzle).solve
   end
 
-  attr_reader :puzzle, :words
+  attr_reader :words, :leading_letter
   def initialize(puzzle)
-    @puzzle = puzzle
     @words = puzzle.scan(/[A-Z]+/)
+    @leading_letter = words.max_by(&:length)[0]
   end
 
   def solve
-    (0..9).to_a.permutation(coefficients.count) do |permutation|
-      next unless permutation
-        .zip(coefficients_values)
-        .sum { |x, y| x * y }
-        .zero?
+    (1..9).each do |n| # we need to remove a 0 permutation to speed it up which is picked from the leading letter of the longest word
+      ((0..9).to_a - [n]).permutation(linear_equation.count - 1) do |permutation|
+        next unless permutation.unshift(n)
+          .zip(equation_coefficients)
+          .sum { |x, y| x * y }
+          .zero?
 
-      result = coefficients_keys.zip(permutation).to_h
-
-      return result if valid?(result)
+        return equation_letters.zip(permutation).to_h
+      end
     end
-    return {}
+
+    {}
   end
 
   private
 
-  def valid?(combination)
-    leading_letters.all? { |letter| combination[letter] != 0 }
+  def equation_coefficients
+    @equation_coefficients ||= linear_equation.map { _1[1] }
   end
 
-  def coefficients
-    @coefficients ||= begin
+  def equation_letters
+    @equation_letters ||= linear_equation.map { _1[0] }
+  end
+
+  def linear_equation
+    @linear_equation ||= begin
       *coeffs, expectation = words
 
       result = Hash.new { |h, k| h[k] = 0 }
@@ -45,21 +50,7 @@ class Alphametics
         result[letter] -= 10 ** power
       end
 
-      result.sort.to_h
+      result.sort_by { |(k,v)| leading_letter == k ? -1 : 1 }
     end
-  end
-
-  def leading_letters
-    @leading_letters ||= words
-      .map { |word| word[0] }
-      .uniq
-  end
-
-  def coefficients_values
-    @coefficients_values ||= coefficients.values
-  end
-
-  def coefficients_keys
-    @coefficients_keys ||= coefficients.keys
   end
 end
