@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require_relative 'alphametics'
+require "byebug"
 
 class AlphameticsTest < Minitest::Test
   def test_puzzle_with_three_letters
