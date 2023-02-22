@@ -6,7 +6,7 @@ class Alphametics
   attr_reader :words, :leading_letter
   def initialize(puzzle)
     @words = puzzle.scan(/[A-Z]+/)
-    @leading_letter = words.max_by(&:length)[0]
+    @leading_letter = words.max_by(&:length).each_char.first
   end
 
   def solve
@@ -27,15 +27,15 @@ class Alphametics
   private
 
   def equation_coefficients
-    @equation_coefficients ||= linear_equation.map { _1[1] }
+    @equation_coefficients ||= linear_equation.map(&:last)
   end
 
   def equation_letters
-    @equation_letters ||= linear_equation.map { _1[0] }
+    @equation_letters ||= linear_equation.map(&:first)
   end
 
   # Transform the string equation into a linear equation with coefficients.
-  # Then sorts so that the leading letter is first. Here A will be first.
+  # Then sorts so the leading letter is first. Here A will be first.
   # => ACA + DD == BD
   # => ACA + DD - BD == 0
   # => 101*A - 10*B + 10*C + 10*D == 0
