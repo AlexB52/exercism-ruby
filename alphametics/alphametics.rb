@@ -34,11 +34,13 @@ class Alphametics
     @equation_letters ||= linear_equation.map { _1[0] }
   end
 
-  # transform the string equation into a linear equation with coefficients
+  # Transform the string equation into a linear equation with coefficients.
+  # Then sorts so that the leading letter is first. Here A will be first.
   # => ACA + DD == BD
   # => ACA + DD - BD == 0
   # => 101*A - 10*B + 10*C + 10*D == 0
   # => { 'A' => 101, 'B' => -10, 'C' => 10, 'D' => 10 }
+  # => [['A', 101], ['B', -10], ['C', 10], ['D', 10]]
   def linear_equation
     @linear_equation ||= begin
       *addends, expectation = words
