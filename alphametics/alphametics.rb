@@ -34,13 +34,18 @@ class Alphametics
     @equation_letters ||= linear_equation.map { _1[0] }
   end
 
+  # transform the string equation into a linear equation with coefficients
+  # => ACA + DD == BD
+  # => ACA + DD - BD == 0
+  # => 101*A - 10*B + 10*C + 10*D == 0
+  # => { 'A' => 101, 'B' => -10, 'C' => 10, 'D' => 10 }
   def linear_equation
     @linear_equation ||= begin
-      *coeffs, expectation = words
+      *addends, expectation = words
 
       result = Hash.new { |h, k| h[k] = 0 }
 
-      coeffs.each do |coeff|
+      addends.each do |coeff|
         coeff.reverse.each_char.with_index do |letter, power|
           result[letter] += 10 ** power
         end
